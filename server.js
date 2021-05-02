@@ -57,7 +57,7 @@ const PORT = process.env.PORT || 2000
 app.listen(PORT, () => {    
     mongoose.connect(`mongodb://localhost:27017/blog`, {useNewUrlParser:true, useUnifiedTopology:true}, () => {
         console.log('Database connected')
-    })
+    }) 
 })
 
 

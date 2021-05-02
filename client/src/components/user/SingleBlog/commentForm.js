@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Button, Col, Row, FormGroup, TextArea } from "reactstrap";
+import { Input, Button, Col, Row, FormGroup } from "reactstrap";
 
 function CommentForm() {
   return (
@@ -17,7 +17,6 @@ function CommentForm() {
                   type="text"
                   name="name"
                   placeholder="Your Name*"
-                  onChange={}
                 />
               </FormGroup>
             </Col>

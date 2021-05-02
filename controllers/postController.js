@@ -1,6 +1,6 @@
 const Post = require('../model/Post')
 // const nodemailer = require("nodemailer")
-const {serverError, resourceError} = require('../utils/error')
+const { serverError, resourceError } = require('../utils/error')
 const postValidator = require('../validator/postValidator')
 
 module.exports = {
@@ -11,8 +11,7 @@ module.exports = {
         let validate = postValidator({ title, description, category, tag, author })
         
         if (!validate.isValid) {
-            return res.status(400).json(validate.error)
-            
+            return res.status(400).json(validate.error) 
         } else {
 
             let post = new Post({title, description, image, category, tag, author, comments, isPublished })
@@ -20,7 +19,6 @@ module.exports = {
             post.save()
                   .then(post => {
                     return res.status(201).json({
-                    //   message: 'post Created Successfully'
                         ...post._doc,
                     })
                   })
