@@ -4,21 +4,20 @@ import { connect } from "react-redux";
 import { LoadComment } from "../../../store/actions/blogAction";
 import CommentForm from "./commentForm";
 
-const Comment = ({ data, comments }) => {
-  const [commentss, setCommentss] = useState([]);
-  const [test, setTest] = useState("helos");
-// this sis another fucntion asyn fuction
-  async function getData() {
-    let params = data._id;
-    await fetch(`/api/post/single-post/${params}`)
-      .then((response) => response.json())
-      .then((commentss) => setCommentss(commentss));
+const Comment = ({  comments, changeHander, commentSubmit }) => {
+  // const [commentss, setCommentss] = useState([]);
+  // const [test, setTest] = useState("helos");
+  // // this sis another fucntion asyn fuction
+  // async function getData() {
+  //   let params = data._id;
+  //   await fetch(`/api/post/single-post/${params}`)
+  //     .then((response) => response.json())
+  //     .then((commentss) => setCommentss(commentss));
+  // }
 
-  }
-
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   // useEffect(() => {
   //     console.log('initialized')
@@ -28,10 +27,10 @@ const Comment = ({ data, comments }) => {
     <div>
       <div className="blog-comments">
         <h4 className="comments-count">
-          {data.comments && data.comments.length} Comments
+          {comments && comments.length} Comments
         </h4>
-        {commentss.length &&
-          commentss.map((comment) => (
+        {comments.length &&
+          comments.map((comment) => (
             <div key={comment} id={comment} className="comment">
               <div className="d-flex">
                 <div className="comment-img">
@@ -51,7 +50,10 @@ const Comment = ({ data, comments }) => {
             </div>
           ))}
 
-        <CommentForm />
+        <CommentForm
+          changeHander={changeHander}
+          commentSubmit={commentSubmit}
+        />
       </div>
     </div>
   );

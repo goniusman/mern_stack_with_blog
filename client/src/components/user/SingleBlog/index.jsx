@@ -1,80 +1,82 @@
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import {
+  SingleloadBlog,
+  createComment,
+  LoadComment,
+} from "../../../store/actions/blogAction";
+import Breadcrumbs from "../breadcrumbs";
+import Sidebar from "../sidebar";
+import Article from "./article";
+import Author from "./author";
+import Comment from "./comment";
 
-import React, { Component } from 'react'
-import {connect} from 'react-redux'
-import {SingleloadBlog} from '../../../store/actions/blogAction';
-import Breadcrumbs from '../breadcrumbs';
-import Sidebar from '../sidebar';
-import Article from './article';
-import Author from './author';
-import Comment from './comment';
+class SingleBlog extends Component {
+  state = {
+    id: this.props.match.params.postId,
+    name: this.props.user.name,
+    email: this.props.user.email,
+    website: "",
+    comments: "",
+  };
 
- class SingleBlog extends Component {
-    
-    state = {
-        name: this.props.user.name,
-        email:  this.props.user.email,
-        website: "",
-        comments: "",
-    }
+  commentChangeHandler = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+  commentSubmit = (e) => {
+    e.preventDefault();
+    const { id, name, email, website, comment } = this.state;
+    this.props.createComment({ id, name, email, website, comment });
+  };
 
-    commentChangeHandler = (e) => {
-        this.setState({
-            [e.target.name ] : e.target.value
-        })
-    }
+  componentDidMount() {
+    const params = this.props.match.params.postId;
+    // const urls = `/api/post/${params}`
 
-    componentDidMount(){
-        const params = this.props.match.params.postId;
-        // const urls = `/api/post/${params}`
-        
-        this.props.SingleloadBlog(params);
+    this.props.SingleloadBlog(params);
 
-        // fetch(urls)
-        //     .then(res => res.json())
-        //     .then(data => this.setState({data}))
-        //     .catch(err => console.log(err))
-        // axios.get(`/api/post/single-post/${params}`)
-        //     .then(comments => this.setState({comments: comments.data}))
-        //     .catch(err => console.log(err))
+    this.props.LoadComment(params);
+  }
 
-    }
-
-    render() {
-       const {data} = this.props
+  render() {
+    const { data } = this.props;
     //    console.log(this.props);
-        return (
-            <>
-                <Breadcrumbs title={data.title} />
+    return (
+      <>
+        <Breadcrumbs title={data.title} />
 
-                <section id="blog" className="blog">
-                    <div className="container" data-aos="fade-up">
+        <section id="blog" className="blog">
+          <div className="container" data-aos="fade-up">
+            <div className="row">
+              <div className="col-lg-8 entries">
+                <Article data={data} />
 
-                        <div className="row">
+                <Author />
 
-                            <div className="col-lg-8 entries">
+                <Comment
+                  changeHander={this.commentChangeHandler}
+                  commentSubmit={this.commentSubmit}
+                  comments={this.props.comments}
+                />
+              </div>
 
-                                    <Article data={data} />
-
-                                    <Author />
-
-                                    <Comment data={data} />
-
-                            </div>
-
-                            <Sidebar />
-
-                        </div>
-
-                    </div>
-                </section>
-            </>
-        )
-    }
+              <Sidebar />
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
 }
 
-const mapStateToProps = state => ({
-    data: state.blog.singleBlog,
-    user: state.auth.user
-})
-export default connect(mapStateToProps, {SingleloadBlog})(SingleBlog)
-
+const mapStateToProps = (state) => ({
+  data: state.blog.singleBlog,
+  user: state.auth.user,
+});
+export default connect(mapStateToProps, {
+  SingleloadBlog,
+  createComment,
+  LoadComment,
+})(SingleBlog);

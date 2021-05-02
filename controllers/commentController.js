@@ -1,96 +1,87 @@
 // const { findById } = require('../model/Comment')
-const Comment = require('../model/Comment')
-const Post = require('../model/Post')
-const {serverError, resourceError} = require('../utils/error')
-const commentValidator = require('../validator/commentValidator')
-
+const Comment = require("../model/Comment");
+const Post = require("../model/Post");
+const { serverError, resourceError } = require("../utils/error");
+const commentValidator = require("../validator/commentValidator");
 
 module.exports = {
- 
-    create(req, res) {
-        let { name, email, website, comment } = req.body
-        let {id} = req.params
+  create(req, res) {
+    let { name, email, website, comment, id } = req.body;
+    console.log(req.body);
+    let validate = commentValidator({ name, email, comment });
 
-        let validate = commentValidator({ name, email, comment })
-
-        if (!validate.isValid) {
-            return res.status(400).json(validate.error)
-        } else {
-       
-            let comments = new Comment({name, email, website, comment, postId: id })
-            comments.save()
-                .then(comment => {
-                    Post.findById(id)
-                        .then(post => {
-                            post.comments.unshift(comment._id)
-                            post.save()
-                                .then(res => {
-                                    return res.status(201).json({
-                                        message: "Comment Id added into post comment"
-                                    })
-                                })
-                                .catch(error => serverError(res, error))
-                        })
-                        .catch(error => serverError(res, error))
-                })
-                .catch(error => serverError(res, error))
-        }
-    },
-
-    getAll(req, res) {
-        // for specific post
-        let _id = req.params.id
-        console.log(_id)
-       Comment.find({postId: _id})
-            .then(comments => {
-                if (comments.length === 0) {
-                    res.status(200).json({
-                        message: 'No Comment Found'
-                    })
-                } else {
-                    res.status(200).json(comments)
-                }
-            })
-            .catch(error => serverError(res, error))
-    },
-
-    getSingleComment(req, res) {
-        let { commentId } = req.params
-        Comment.findById(commentId)
-            .then(comment => {
-                if (!comment) {
-                    res.status(200).json({
-                        message: 'No Comment Found'
-                    })
-                } else {
-                    res.status(200).json(comment)
-                }
-            })
-            .catch(error => serverError(res, error))
-    },
-
-    update(req, res) {
-        let { commentId } = req.params
-        Comment.findOneAndUpdate({ _id: commentId }, { $set: req.body }, {new: true})
-            .then(result => { 
-                res.status(200).json({
-                    message: 'Updated Successfully',
-                    // comment: result
-                })
-            })
-            .catch(error => serverError(res, error))
-    },
-
-    remove(req, res) {
-        let { commentId } = req.params
-        Comment.findOneAndDelete({ _id: commentId })
-            .then(result => {
-                res.status(200).json({
-                    message: 'Deleted Successfully',
-                    // ...result._doc
-                })
-            })
-            .catch(error => serverError(res, error))
+    if (!validate.isValid) {
+      return res.status(400).json(validate.error);
+    } else {
+      let comments = new Comment({ name, email, website, comment, postId: id });
+      comments
+        .save()
+        .then((comment) => {
+          return res.status(201).json({
+            ...comment._doc,
+          });
+        })
+        .catch((error) => serverError(res, error));
     }
+  },
 
-}
+  getAll(req, res) {
+    // for specific post
+    let _id = req.params.id;
+
+    Comment.find({ postId: _id })
+      .then((comments) => {
+        if (comments.length === 0) {
+          res.status(200).json({
+            message: "No Comment Found",
+          });
+        } else {
+          res.status(200).json(comments);
+        }
+      })
+      .catch((error) => serverError(res, error));
+  },
+
+  getSingleComment(req, res) {
+    let { commentId } = req.params;
+    Comment.findById(commentId)
+      .then((comment) => {
+        if (!comment) {
+          res.status(200).json({
+            message: "No Comment Found",
+          });
+        } else {
+          res.status(200).json(comment);
+        }
+      })
+      .catch((error) => serverError(res, error));
+  },
+
+  update(req, res) {
+    let { commentId } = req.params;
+    Comment.findOneAndUpdate(
+      { _id: commentId },
+      { $set: req.body },
+      { new: true }
+    )
+      .then((result) => {
+        res.status(200).json({
+          message: "Updated Successfully",
+          // comment: result
+        });
+      })
+      .catch((error) => serverError(res, error));
+  },
+
+  remove(req, res) {
+    let { commentId } = req.params;
+    Comment.findOneAndDelete({ _id: commentId })
+      .then((result) => {
+        res.status(200).json({
+          message: "Deleted Successfully",
+          // ...result._doc
+        });
+      })
+      .catch((error) => serverError(res, error));
+  },
+};

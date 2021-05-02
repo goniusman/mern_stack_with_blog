@@ -1,7 +1,7 @@
 import React from "react";
-import { Input, Button, Col, Row, FormGroup } from "reactstrap";
+import { Input, Button, Col, Row, FormGroup, Form } from "reactstrap";
 
-function CommentForm() {
+function CommentForm({ changeHander, commentSubmit }) {
   return (
     <>
       <div className="reply-form">
@@ -9,7 +9,7 @@ function CommentForm() {
         <p>
           Your email address will not be published. Required fields are marked *{" "}
         </p>
-        <form action="">
+        <Form onSubmit={commentSubmit}>
           <Row>
             <Col>
               <FormGroup>
@@ -17,19 +17,30 @@ function CommentForm() {
                   type="text"
                   name="name"
                   placeholder="Your Name*"
+                  onChange={changeHander}
                 />
               </FormGroup>
             </Col>
             <Col>
               <FormGroup>
-                <Input type="text" name="email" placeholder="Your Email*" />
+                <Input
+                  type="text"
+                  name="email"
+                  placeholder="Your Email*"
+                  onChange={changeHander}
+                />
               </FormGroup>
             </Col>
           </Row>
           <Row>
             <Col>
               <FormGroup>
-                <Input type="text" name="website" placeholder="Your Website" />
+                <Input
+                  type="text"
+                  name="website"
+                  placeholder="Your Website"
+                  onChange={changeHander}
+                />
               </FormGroup>
             </Col>
           </Row>
@@ -40,6 +51,7 @@ function CommentForm() {
                   type="textarea"
                   name="comment"
                   placeholder="Your Comment*"
+                  onChange={changeHander}
                 />
               </FormGroup>
             </Col>
@@ -47,7 +59,7 @@ function CommentForm() {
           <Button type="submit" className="btn btn-primary">
             Post Comment
           </Button>
-        </form>
+        </Form>
       </div>
     </>
   );

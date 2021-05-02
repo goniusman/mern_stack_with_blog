@@ -6,7 +6,7 @@ const Articles = ({item}) => {
     <article className="entry" key={item._id}>
 
       <div className="entry-img">
-          <img src="assets/img/blog/blog-1.jpg" alt="" className="img-fluid"/>
+          <img src="../assets/img/blog/blog-1.jpg" alt="" className="img-fluid"/>
       </div>
 
       <h2 className="entry-title">
