@@ -7,7 +7,7 @@ const commentValidator = require("../validator/commentValidator");
 module.exports = {
   create(req, res) {
     let { name, email, website, comment, id } = req.body;
-    console.log(req.body);
+
     let validate = commentValidator({ name, email, comment });
 
     if (!validate.isValid) {
@@ -17,9 +17,19 @@ module.exports = {
       comments
         .save()
         .then((comment) => {
-          return res.status(201).json({
-            ...comment._doc,
-          });
+          Post.findById(id)
+            .then((post) => {
+              post.comments.unshift(comment._id);
+              post
+                .save()
+                .then((post) => {
+                  return res.status(201).json({
+                    ...comment._doc,
+                  });
+                })
+                .catch((error) => serverError(res, error));
+            })
+            .catch((error) => serverError(res, error));
         })
         .catch((error) => serverError(res, error));
     }

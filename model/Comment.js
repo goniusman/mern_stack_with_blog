@@ -1,32 +1,32 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
-
-
-const CommentSchema = new Schema({
+const CommentSchema = new Schema(
+  {
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     website: {
-        type: String,
-        default: 'mysite.com' 
+      type: String,
+      required: false,
     },
     comment: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     postId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Post'
-    }
-}, { timestamps: true })
+      type: Schema.Types.ObjectId,
+      ref: "Post",
+    },
+  },
+  { timestamps: true }
+);
 
-const Comment = mongoose.model('Comment', CommentSchema)
-module.exports = Comment
-
+const Comment = mongoose.model("Comment", CommentSchema);
+module.exports = Comment;

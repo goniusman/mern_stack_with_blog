@@ -28,9 +28,7 @@ const blogReducer = (state = init, action) => {
     case types.LOAD_COMMENT: {
       return {
         ...state,
-        // blog: {},
         comments: action.payload.comments,
-        // error: {}
       };
     }
     case types.CREATE_COMMENT: {
@@ -38,7 +36,13 @@ const blogReducer = (state = init, action) => {
       comments.unshift(action.payload.comment);
       return {
         ...state,
-        comments: action.payload.comments,
+        comments: action.payload.comment,
+      };
+    }
+    case types.COMMENT_ERROR: {
+      return {
+        ...state,
+        error: action.payload.error,
       };
     }
     case types.CREATE_POST: {

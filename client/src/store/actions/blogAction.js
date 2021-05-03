@@ -80,13 +80,15 @@ export const createComment = (posts) => (dispatch) => {
           error: {},
         },
       });
+      console.log(res);
     })
     .catch((err) => {
-      dispatch({
-        type: types.COMMENT_ERROR,
-        payload: {
-          error: err.response.data,
-        },
-      });
+      // dispatch({
+      //   type: types.COMMENT_ERROR,
+      //   payload: {
+      //     error: err.response.data,
+      //   },
+      // });
+      console.log(err);
     });
 };
