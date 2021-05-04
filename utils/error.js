@@ -1,16 +1,14 @@
 module.exports = {
+  serverError(res, error) {
+    return res.status(500).json({
+      error,
+      message: "Server Error Occurred",
+    });
+  },
 
-    serverError(res, error) {
-      console.log(error);
-        res.status(500).json({
-            message: "Server Error Occurred"
-        });
-      },
-
-    resourceError(res, message) {
-          res.status(400).json({
-          message
-      });
-    }
-
+  resourceError(res, message) {
+    return res.status(400).json({
+      message,
+    });
+  },
 };
