@@ -53,7 +53,7 @@ class SingleBlog extends Component {
               <div className="col-lg-8 entries">
                 <Article data={data} />
 
-                <Author />
+                <Author data={data} />
 
                 <Comment
                   changeHander={this.commentChangeHandler}

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { LoadComment } from "../../../store/actions/blogAction";
 import CommentForm from "./commentForm";
 
-const Comment = ({  comments, changeHander, commentSubmit }) => {
+const Comment = ({ comments, changeHander, commentSubmit }) => {
   // const [commentss, setCommentss] = useState([]);
   // const [test, setTest] = useState("helos");
   // // this sis another fucntion asyn fuction
@@ -26,11 +26,16 @@ const Comment = ({  comments, changeHander, commentSubmit }) => {
   return (
     <div>
       <div className="blog-comments">
-        <h4 className="comments-count">
-          {comments && comments.length} Comments
-        </h4>
+        {comments.message ? (
+          <h4>{comments.message}</h4>
+        ) : (
+          <h4 className="comments-count">
+            {comments && comments.length} Comments{" "}
+          </h4>
+        )}
+
         {comments.length &&
-          comments.map((comment) => (
+          ~comments.map((comment) => (
             <div key={comment} id={comment} className="comment">
               <div className="d-flex">
                 <div className="comment-img">

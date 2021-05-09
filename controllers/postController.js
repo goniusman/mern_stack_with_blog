@@ -1,3 +1,4 @@
+const multer = require("multer");
 const Post = require("../model/Post");
 // const nodemailer = require("nodemailer")
 const { serverError, resourceError } = require("../utils/error");
@@ -12,14 +13,24 @@ module.exports = {
       category,
       tag,
       author,
+      file,
       comments,
       isPublished,
     } = req.body;
+    console.log(req.file);
+    return;
     let validate = postValidator({ title, description, category, tag, author });
 
     if (!validate.isValid) {
       return res.status(400).json(validate.error);
     } else {
+      file.mv(`${__dirname}/../client/public/uploads/${file.name}`, (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json(err);
+        }
+      });
+
       let post = new Post({
         title,
         description,
@@ -27,10 +38,10 @@ module.exports = {
         category,
         tag,
         author,
+        image: file.name,
         comments,
         isPublished,
       });
-
       post
         .save()
         .then((post) => {

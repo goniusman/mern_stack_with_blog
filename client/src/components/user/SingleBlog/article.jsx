@@ -26,9 +26,6 @@ const Article = ({data}) => {
 <div className="entry-content">
     
    {data.description}
-
-    <img src="../assets/img/blog/blog-inside-post.jpg" className="img-fluid" alt=""/>
-
     
 </div>
 
