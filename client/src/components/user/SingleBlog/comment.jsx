@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { LoadComment } from "../../../store/actions/blogAction";
 import CommentForm from "./commentForm";
 
-const Comment = ({ comments, changeHander, commentSubmit }) => {
+const Comment = ({ comments, changeHander, commentSubmit, auth, state }) => {
   // const [commentss, setCommentss] = useState([]);
   // const [test, setTest] = useState("helos");
   // // this sis another fucntion asyn fuction
@@ -26,20 +26,16 @@ const Comment = ({ comments, changeHander, commentSubmit }) => {
   return (
     <div>
       <div className="blog-comments">
-        {comments.message ? (
-          <h4>{comments.message}</h4>
-        ) : (
-          <h4 className="comments-count">
-            {comments && comments.length} Comments{" "}
-          </h4>
-        )}
+        <h4 className="comments-count">
+          {comments && comments.length} Comments{" "}
+        </h4>
 
-        {comments.length &&
-          ~comments.map((comment) => (
+        {comments.length > 0 ? (
+          comments.map((comment) => (
             <div key={comment} id={comment} className="comment">
               <div className="d-flex">
                 <div className="comment-img">
-                  <img src="../assets/img/blog/comments-1.jpg" alt="" />
+                  <img src="../uploads/default-author.jpg" alt="" />
                 </div>
                 <div>
                   <h5>
@@ -48,16 +44,23 @@ const Comment = ({ comments, changeHander, commentSubmit }) => {
                       <i className="bi bi-reply-fill"></i> Reply
                     </Link>
                   </h5>
-                  <time>{comment.createdAt}</time>
+                  <time>
+                    {new Date(comment.createdAt).toLocaleDateString()}
+                  </time>
                   <p>{comment.comment}</p>
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <p>Comment Not Found</p>
+        )}
 
         <CommentForm
           changeHander={changeHander}
           commentSubmit={commentSubmit}
+          auth={auth}
+          state={state}
         />
       </div>
     </div>
@@ -67,6 +70,7 @@ const Comment = ({ comments, changeHander, commentSubmit }) => {
 const mapStateToProps = (state) => ({
   comments: state.blog.comments,
   user: state.auth.user,
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { LoadComment })(Comment);

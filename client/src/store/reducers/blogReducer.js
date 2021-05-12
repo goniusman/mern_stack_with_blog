@@ -1,10 +1,10 @@
 import * as types from "../actions/types";
 
 const init = {
-  allBlog: {},
+  allBlog: [],
   error: {},
   singleBlog: {},
-  comments: {},
+  comments: [],
 };
 
 const blogReducer = (state = init, action) => {
@@ -32,11 +32,11 @@ const blogReducer = (state = init, action) => {
       };
     }
     case types.CREATE_COMMENT: {
-      let comments = [...state];
-      comments.unshift(action.payload.comment);
+      let comments = [...state.comments];
+      comments.push(action.payload.comment);
       return {
         ...state,
-        comments: action.payload.comment,
+        comments,
       };
     }
     case types.COMMENT_ERROR: {
@@ -46,13 +46,11 @@ const blogReducer = (state = init, action) => {
       };
     }
     case types.CREATE_POST: {
-      let allBlog = [...state];
-      allBlog.unshift(action.payload.blog);
+      let allBlog = [...state.allBlog];
+      allBlog.push(action.payload.blog);
       return {
         ...state,
-        allBlog: action.payload.blog,
-        // singleBlog: {},
-        // error: {}
+        allBlog,
       };
     }
     case types.POST_ERROR: {

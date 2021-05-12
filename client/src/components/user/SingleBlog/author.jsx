@@ -6,7 +6,7 @@ const Author = ({ data }) => {
     <>
       <div className="blog-author d-flex align-items-center">
         <img
-          src="../assets/img/blog/blog-author.jpg"
+          src="../uploads/default-author.jpg"
           className="rounded-circle float-left"
           alt=""
         />

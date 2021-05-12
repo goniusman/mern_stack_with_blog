@@ -35,6 +35,7 @@ export const SingleloadBlog = (id) => (dispatchs) => {
 export const LoadComment = (id) => (dispatch) => {
   Axios.get(`/api/post/single-post/${id}`)
     .then((res) => {
+      
       dispatch({
         type: types.LOAD_COMMENT,
         payload: {
@@ -51,13 +52,17 @@ export const LoadComment = (id) => (dispatch) => {
 export const createPost = (posts) => (dispatch) => {
   Axios.post("/api/post/", posts)
     .then((res) => {
-      dispatch({
-        type: types.CREATE_POST,
-        payload: {
-          blog: res.data,
-          error: {},
-        },
-      });
+      try {
+        dispatch({
+          type: types.CREATE_POST,
+          payload: {
+            blog: res.data,
+            error: {},
+          },
+        });
+      } catch (error) {
+        console.log(res, error);
+      }
     })
     .catch((err) => {
       dispatch({
@@ -66,29 +71,31 @@ export const createPost = (posts) => (dispatch) => {
           error: err.response.data,
         },
       });
-      console.log(err.response.data);
     });
 };
 
 export const createComment = (posts) => (dispatch) => {
   Axios.post("/api/post/single-post/", posts)
     .then((res) => {
-      dispatch({
-        type: types.CREATE_COMMENT,
-        payload: {
-          comment: res.data,
-          error: {},
-        },
-      });
-      console.log(res);
+      try {
+        dispatch({
+          type: types.CREATE_COMMENT,
+          payload: { 
+            comment: res.data,
+            error: {},
+          },
+        });
+      } catch (error) {
+        console.log(res, error);
+      }
     })
     .catch((err) => {
-      // dispatch({
-      //   type: types.COMMENT_ERROR,
-      //   payload: {
-      //     error: err.response.data,
-      //   },
-      // });
+      dispatch({
+        type: types.COMMENT_ERROR,
+        payload: {
+          error: err.response.data,
+        },
+      });
       console.log(err);
     });
 };

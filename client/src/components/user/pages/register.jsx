@@ -30,6 +30,9 @@ export class Register extends Component {
       [e.target.name]: e.target.value,
     });
   };
+
+
+  
   handleSubmit = (e) => {
     e.preventDefault();
     const { name, email, role, password, confirmPassword, error } = this.state;
@@ -108,12 +111,14 @@ export class Register extends Component {
                                 ? "form-control is-invalid"
                                 : "form-control"
                             }
+                            multiple
                           >
                             <option value="default">Select Type</option>
                             <option value="billing">Billing</option>
                             <option value="instance">Instance</option>
                             <option value="network">Network</option>
                           </Input>
+
                           {error.role && (
                             <div className="invalid-feedback">{error.role}</div>
                           )}

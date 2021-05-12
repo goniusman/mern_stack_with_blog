@@ -11,13 +11,20 @@ import Article from "./article";
 import Author from "./author";
 import Comment from "./comment";
 
+const stylefornotfount = {
+  marginTop: "5rem",
+  paddingTop: "2rem",
+  paddingBottom: "2rem",
+  textalign: "center",
+  color: "red",
+};
 class SingleBlog extends Component {
   state = {
     id: this.props.match.params.postId,
     name: this.props.user.name,
     email: this.props.user.email,
     website: "",
-    comments: "",
+    comment: "",
   };
 
   commentChangeHandler = (e) => {
@@ -29,6 +36,9 @@ class SingleBlog extends Component {
     e.preventDefault();
     const { id, name, email, website, comment } = this.state;
     this.props.createComment({ id, name, email, website, comment });
+    this.setState({
+      comment: "",
+    });
   };
 
   componentDidMount() {
@@ -42,30 +52,37 @@ class SingleBlog extends Component {
 
   render() {
     const { data } = this.props;
+    console.log(data._id);
     //    console.log(this.props);
     return (
       <>
-        <Breadcrumbs title={data.title} />
+        {data._id ? (
+          <>
+            <Breadcrumbs title={data.title} />
+            <section id="blog" className="blog">
+              <div className="container" data-aos="fade-up">
+                <div className="row">
+                  <div className="col-lg-8 entries">
+                    <Article data={data} />
 
-        <section id="blog" className="blog">
-          <div className="container" data-aos="fade-up">
-            <div className="row">
-              <div className="col-lg-8 entries">
-                <Article data={data} />
+                    <Author data={data} />
 
-                <Author data={data} />
+                    <Comment
+                      changeHander={this.commentChangeHandler}
+                      commentSubmit={this.commentSubmit}
+                      comments={this.props.comments}
+                      state={this.state}
+                    />
+                  </div>
 
-                <Comment
-                  changeHander={this.commentChangeHandler}
-                  commentSubmit={this.commentSubmit}
-                  comments={this.props.comments}
-                />
+                  <Sidebar />
+                </div>
               </div>
-
-              <Sidebar />
-            </div>
-          </div>
-        </section>
+            </section>
+          </>
+        ) : (
+          <h1 style={stylefornotfount}>No Products Found</h1>
+        )}
       </>
     );
   }

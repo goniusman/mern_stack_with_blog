@@ -6,6 +6,9 @@ const postValidator = require("../validator/postValidator");
 
 module.exports = {
   create(req, res) {
+    if (req.files === null) {
+      return res.status(400).json({ msg: "No file uploaded" });
+    }
     let {
       title,
       description,
@@ -13,23 +16,26 @@ module.exports = {
       category,
       tag,
       author,
-      file,
       comments,
       isPublished,
     } = req.body;
-    console.log(req.file);
-    return;
+    let file = req.files.file;
+    console.log(file);
     let validate = postValidator({ title, description, category, tag, author });
 
     if (!validate.isValid) {
       return res.status(400).json(validate.error);
     } else {
-      file.mv(`${__dirname}/../client/public/uploads/${file.name}`, (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json(err);
+      let filePath = `/uploads/` + Date.now() + `-${file.name}`;
+      file.mv(
+        `${__dirname}/../client/public/uploads/` + Date.now() + `-${file.name}`,
+        (err) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json(err);
+          }
         }
-      });
+      );
 
       let post = new Post({
         title,
@@ -38,13 +44,14 @@ module.exports = {
         category,
         tag,
         author,
-        image: file.name,
+        image: filePath,
         comments,
         isPublished,
       });
       post
         .save()
         .then((post) => {
+          console.log(post);
           return res.status(201).json({
             ...post._doc,
           });

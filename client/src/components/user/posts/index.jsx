@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { loadBlog, createPost } from "../../../store/actions/blogAction";
 import Breadcrumbs from "../breadcrumbs";
@@ -20,6 +22,7 @@ class Blog extends React.Component {
     pageSize: 2,
     currentPage: 1,
     error: {},
+    loaded: 0,
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -49,16 +52,82 @@ class Blog extends React.Component {
     });
   };
 
+  maxSelectFile = (event) => {
+    let files = event.target.files; // create file object
+    if (files.length > 3) {
+      const msg = "Only 3 images can be uploaded at a time";
+      event.target.value = null; // discard selected file
+      console.log(msg);
+      return false;
+    }
+    return true;
+  };
+
+  checkMimeType = (event) => {
+    //getting file object
+    let files = event.target.files;
+    //define message container
+    let err = "";
+    // list allow mime type
+    const types = ["image/png", "image/jpeg", "image/gif"];
+    // loop access array
+    for (var x = 0; x < files.length; x++) {
+      // compare file type find doesn't matach
+      if (types.every((type) => files[x].type !== type)) {
+        // create error message and assign to container
+        err += files[x].type + " is not a supported format\n";
+      }
+    }
+
+    if (err !== "") {
+      // if message not same old that mean has error
+      event.target.value = null; // discard selected file
+      console.log(err);
+      toast.error(err);
+      return false;
+    }
+    return true;
+  };
+
+  checkFileSize = (event) => {
+    let files = event.target.files;
+    let size = 345000;
+    let err = "";
+    for (var x = 0; x < files.length; x++) {
+      if (files[x].size > size) {
+        err += files[x].type + "is too large, please pick a smaller file\n";
+      }
+    }
+    if (err !== "") {
+      // if message not same old that mean has error
+      event.target.value = null; // discard selected file
+      console.log(err);
+      toast.error(err);
+      return false;
+    }
+
+    return true;
+  };
   imageHandler = (e) => {
-    this.setState({
-      file: e.target.files[0],
-    });
+    if (this.checkMimeType(e) && this.checkFileSize(e)) {
+      this.setState({
+        file: e.target.files[0],
+      });
+    }
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
     const { title, description, category, tag, author, file } = this.state;
-    this.props.createPost({ title, description, category, tag, author, file });
+    let formdata = new FormData();
+    formdata.append("file", file);
+    formdata.append("title", title);
+    formdata.append("description", description);
+    formdata.append("author", author);
+    formdata.append("tag", tag);
+    formdata.append("category", category);
+    this.props.createPost(formdata);
+    this.setState({ title: "", description: "", tag: "", file: "" });
   };
 
   pageChangeEvent = (page) => {
@@ -76,17 +145,20 @@ class Blog extends React.Component {
     return (
       <>
         <Breadcrumbs title="All Blog" />
-
         <section id="blog" className="blog">
           <div className="container" data-aos="fade-up">
             <div className="row">
               <div className="col-lg-8 entries">
+                <div class="form-group">
+                  <ToastContainer />
+                </div>
                 {auth.isAuthenticated && (
                   <PostForm
                     name={this.props.auth.user.name}
                     changeHandler={this.changeHandler}
                     handleSubmit={this.handleSubmit}
                     imageHandler={this.imageHandler}
+                    state={this.state}
                   />
                 )}
                 {posts.length &&

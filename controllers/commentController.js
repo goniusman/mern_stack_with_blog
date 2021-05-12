@@ -42,11 +42,9 @@ module.exports = {
     Comment.find({ postId: _id })
       .then((comments) => {
         if (comments.length === 0) {
-          res.status(200).json({
-            message: "No Comment Found",
-          });
+          return res.status(200).json([]);
         } else {
-          res.status(200).json(comments);
+          return res.status(200).json(comments);
         }
       })
       .catch((error) => serverError(res, error));

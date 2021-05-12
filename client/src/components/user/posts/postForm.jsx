@@ -1,8 +1,8 @@
 import React from "react";
-
 import { Button, Input, Col, Row, FormGroup } from "reactstrap";
 
-function PostForm({ name, changeHandler, handleSubmit, imageHandler }) {
+function PostForm({ name, changeHandler, handleSubmit, imageHandler, state }) {
+  const { title, description, tag } = state;
   return (
     <>
       <div className="reply-form mb-5">
@@ -15,6 +15,7 @@ function PostForm({ name, changeHandler, handleSubmit, imageHandler }) {
                   type="text"
                   placeholder="Post Title*"
                   onChange={changeHandler}
+                  value={title}
                 />
               </FormGroup>
               <Input
@@ -34,7 +35,12 @@ function PostForm({ name, changeHandler, handleSubmit, imageHandler }) {
           <Row>
             <Col>
               <FormGroup>
-                <Input name="tag" type="file" onChange={imageHandler} />
+                <Input
+                  name="file"
+                  type="file"
+                  onChange={imageHandler}
+                  multiple
+                />
               </FormGroup>
             </Col>
           </Row>
@@ -47,6 +53,7 @@ function PostForm({ name, changeHandler, handleSubmit, imageHandler }) {
                   type="textarea"
                   placeholder="Description"
                   onChange={changeHandler}
+                  value={description}
                 />
               </FormGroup>
             </Col>
@@ -59,6 +66,7 @@ function PostForm({ name, changeHandler, handleSubmit, imageHandler }) {
                   type="text"
                   placeholder="all tags"
                   onChange={changeHandler}
+                  value={tag}
                 />
               </FormGroup>
             </Col>
