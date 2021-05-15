@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { Button, Input, Col, Row, FormGroup } from "reactstrap";
+import { loadCategory } from "../../../store/actions/blogAction";
 
-function PostForm({ name, changeHandler, handleSubmit, imageHandler, state }) {
+function PostForm({ name, changeHandler, handleSubmit, imageHandler, state, categories }) {
+  // const [categories, setCategories] = useState([]);
+
+  // async function getData() {
+  //   await fetch(`/api/category`)
+  //     .then((response) => response.json())
+  //     .then((categories) => setCategories(categories));
+  // }
+
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
   const { title, description, tag } = state;
+
   return (
     <>
       <div className="reply-form mb-5">
@@ -24,12 +39,20 @@ function PostForm({ name, changeHandler, handleSubmit, imageHandler, state }) {
                 value={name}
                 onChange={changeHandler}
               />
-              <Input
-                name="category"
-                type="hidden"
-                value="general"
-                onChange={changeHandler}
-              />
+              <FormGroup>
+                <Input
+                  type="select"
+                  name="category"
+                  id="category"
+                  onChange={changeHandler}
+                >
+                  <option value="">Select Type</option>
+                  {categories.length > 0 &&
+                    categories.map((cat) => (
+                      <option value={cat.category}>{cat.category}</option>
+                    ))}
+                </Input>
+              </FormGroup>
             </Col>
           </Row>
           <Row>
@@ -78,4 +101,8 @@ function PostForm({ name, changeHandler, handleSubmit, imageHandler, state }) {
   );
 }
 
+// const mamStateToProps = (state) => ({
+//   posts: state.blog,
+// });
+// export default connect(mamStateToProps, { loadCategory })(PostForm);
 export default PostForm;

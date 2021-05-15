@@ -26,6 +26,10 @@ module.exports = {
     if (!validate.isValid) {
       return res.status(400).json(validate.error);
     } else {
+      // const dir = "./uploads";
+      // if (!fs.existsSync(dir)) {
+      //   fs.mkdirSync(dir);
+      // }
       let filePath = `/uploads/` + Date.now() + `-${file.name}`;
       file.mv(
         `${__dirname}/../client/public/uploads/` + Date.now() + `-${file.name}`,

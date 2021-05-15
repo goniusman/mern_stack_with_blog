@@ -1,3 +1,4 @@
+export const LOAD_CATEGORY = "LOAD_CATEGORY";
 export const LOAD_BLOG = "LOAD_BLOG";
 export const LOAD_SINGLE_BLOG = "LOAD_SINGLE_BLOG";
 export const USERS_ERROR = "USERS_ERROR";

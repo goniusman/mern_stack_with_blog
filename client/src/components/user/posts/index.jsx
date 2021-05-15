@@ -3,7 +3,11 @@ import { connect } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { loadBlog, createPost } from "../../../store/actions/blogAction";
+import {
+  loadBlog,
+  createPost,
+  loadCategory,
+} from "../../../store/actions/blogAction";
 import Breadcrumbs from "../breadcrumbs";
 import PostForm from "./postForm";
 import Sidebar from "../sidebar";
@@ -23,6 +27,7 @@ class Blog extends React.Component {
     currentPage: 1,
     error: {},
     loaded: 0,
+    cat: "",
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -44,6 +49,7 @@ class Blog extends React.Component {
     //         .catch((err) => console.log(err))
 
     this.props.loadBlog();
+    this.props.loadCategory();
   }
 
   changeHandler = (e) => {
@@ -108,6 +114,7 @@ class Blog extends React.Component {
 
     return true;
   };
+
   imageHandler = (e) => {
     if (this.checkMimeType(e) && this.checkFileSize(e)) {
       this.setState({
@@ -137,10 +144,41 @@ class Blog extends React.Component {
     });
   };
 
-  render() {
-    const { posts: allPosts, auth } = this.props;
+  handlePost = () => {
+    const { posts: allPosts } = this.props;
+    let tagposts = allPosts.allBlog.filter((p) => p.tag !== "banana");
+
     const { currentPage, pageSize } = this.state;
-    const posts = paginate(allPosts.allBlog, currentPage, pageSize);
+    let aposts = paginate(tagposts, currentPage, pageSize);
+
+    return aposts.map((item) => <Articles key={item._id} item={item} />);
+  };
+
+  catLoad = (catname) => {
+    this.setState({ cat: catname });
+  };
+
+  performCat = (posts) => {
+    const { cat } = this.state;
+    return posts.filter((p) => p.category === cat);
+  };
+
+  handlePagination = () => {
+    let { posts: allPosts } = this.props;
+    allPosts = this.performCat(allPosts.allBlog);
+    console.log(allPosts);
+    return (
+      <Pagination
+        items={allPosts && allPosts.length}
+        currentPage={this.state.currentPage}
+        pageSize={this.state.pageSize}
+        pageChange={this.pageChangeEvent}
+      />
+    );
+  };
+
+  render() {
+    const { auth, posts } = this.props;
 
     return (
       <>
@@ -159,20 +197,15 @@ class Blog extends React.Component {
                     handleSubmit={this.handleSubmit}
                     imageHandler={this.imageHandler}
                     state={this.state}
+                    categories={posts.categories}
                   />
                 )}
-                {posts.length &&
-                  posts.map((item) => <Articles key={item._id} item={item} />)}
 
-                <Pagination
-                  items={allPosts.allBlog && allPosts.allBlog.length}
-                  currentPage={currentPage}
-                  pageSize={pageSize}
-                  pageChange={this.pageChangeEvent}
-                />
+                {this.handlePost()}
+                {this.handlePagination()}
               </div>
 
-              <Sidebar />
+              <Sidebar categories={posts.categories} catLoad={this.catLoad} />
             </div>
           </div>
         </section>
@@ -185,4 +218,6 @@ const mamStateToProps = (state) => ({
   posts: state.blog,
   auth: state.auth,
 });
-export default connect(mamStateToProps, { loadBlog, createPost })(Blog);
+export default connect(mamStateToProps, { loadBlog, createPost, loadCategory })(
+  Blog
+);

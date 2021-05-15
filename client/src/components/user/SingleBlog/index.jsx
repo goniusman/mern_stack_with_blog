@@ -52,8 +52,6 @@ class SingleBlog extends Component {
 
   render() {
     const { data } = this.props;
-    console.log(data._id);
-    //    console.log(this.props);
     return (
       <>
         {data._id ? (

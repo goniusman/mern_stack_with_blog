@@ -18,8 +18,8 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// app.use(passport.initialize())
-// require('./passport')(passport)
+app.use(passport.initialize());
+require("./passport")(passport);
 
 app.use(fileUpload());
 

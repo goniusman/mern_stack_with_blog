@@ -5,6 +5,7 @@ const init = {
   error: {},
   singleBlog: {},
   comments: [],
+  categories: [],
 };
 
 const blogReducer = (state = init, action) => {
@@ -13,6 +14,14 @@ const blogReducer = (state = init, action) => {
       return {
         ...state,
         allBlog: action.payload.blog,
+        // singleBlog: {},
+        // error: {}
+      };
+    }
+    case types.LOAD_CATEGORY: {
+      return {
+        ...state,
+        categories: action.payload.category,
         // singleBlog: {},
         // error: {}
       };
