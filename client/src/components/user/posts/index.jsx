@@ -17,12 +17,14 @@ import Articles from "./article";
 
 class Blog extends React.Component {
   state = {
-    title: "",
-    description: "",
-    tag: "",
-    category: "genaral",
-    author: "emon",
-    file: "",
+    post: {
+      title: "",
+      description: "",
+      tag: "",
+      category: "genaral",
+      author: this.props.auth.user.name,
+      file: "",
+    },
     pageSize: 2,
     currentPage: 1,
     error: {},
@@ -54,7 +56,9 @@ class Blog extends React.Component {
 
   changeHandler = (e) => {
     this.setState({
-      [e.target.name]: e.target.value,
+      post: {
+        [e.target.name]: [e.target.value],
+      },
     });
   };
 
@@ -125,7 +129,10 @@ class Blog extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { title, description, category, tag, author, file } = this.state;
+    const {
+      post: { title, description, category, tag, author, file },
+    } = this.state;
+    console.log(title, description, category, tag);
     let formdata = new FormData();
     formdata.append("file", file);
     formdata.append("title", title);
@@ -146,16 +153,24 @@ class Blog extends React.Component {
 
   handlePost = () => {
     const { posts: allPosts } = this.props;
-    let tagposts = allPosts.allBlog.filter((p) => p.tag !== "banana");
+    const { currentPage, pageSize, cat } = this.state;
 
-    const { currentPage, pageSize } = this.state;
+    let tagposts = cat
+      ? allPosts.allBlog.filter((p) => p.category === cat)
+      : allPosts.allBlog;
+
     let aposts = paginate(tagposts, currentPage, pageSize);
-
-    return aposts.map((item) => <Articles key={item._id} item={item} />);
+    let posts =
+      aposts.length > 0 ? (
+        aposts.map((item) => <Articles key={item._id} item={item} />)
+      ) : (
+        <p>There are no posts</p>
+      );
+    return posts;
   };
 
   catLoad = (catname) => {
-    this.setState({ cat: catname });
+    this.setState({ cat: catname, currentPage: 1 });
   };
 
   performCat = (posts) => {
@@ -165,13 +180,16 @@ class Blog extends React.Component {
 
   handlePagination = () => {
     let { posts: allPosts } = this.props;
-    allPosts = this.performCat(allPosts.allBlog);
-    console.log(allPosts);
+    // allPosts = this.performCat(allPosts.allBlog);
+    const { currentPage, pageSize, cat } = this.state;
+    let tagposts = cat
+      ? allPosts.allBlog.filter((p) => p.category === cat)
+      : allPosts.allBlog;
     return (
       <Pagination
-        items={allPosts && allPosts.length}
-        currentPage={this.state.currentPage}
-        pageSize={this.state.pageSize}
+        items={allPosts && tagposts.length}
+        currentPage={currentPage}
+        pageSize={pageSize}
         pageChange={this.pageChangeEvent}
       />
     );
@@ -200,7 +218,7 @@ class Blog extends React.Component {
                     categories={posts.categories}
                   />
                 )}
-
+                {/* {posts.allBlog && posts.allBlog.length} */}
                 {this.handlePost()}
                 {this.handlePagination()}
               </div>

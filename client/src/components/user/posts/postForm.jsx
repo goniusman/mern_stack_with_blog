@@ -3,7 +3,14 @@ import { connect } from "react-redux";
 import { Button, Input, Col, Row, FormGroup } from "reactstrap";
 import { loadCategory } from "../../../store/actions/blogAction";
 
-function PostForm({ name, changeHandler, handleSubmit, imageHandler, state, categories }) {
+function PostForm({
+  name,
+  changeHandler,
+  handleSubmit,
+  imageHandler,
+  state,
+  categories,
+}) {
   // const [categories, setCategories] = useState([]);
 
   // async function getData() {
@@ -16,7 +23,9 @@ function PostForm({ name, changeHandler, handleSubmit, imageHandler, state, cate
   //   getData();
   // }, []);
 
-  const { title, description, tag } = state;
+  const {
+    post: { title, description, tag },
+  } = state;
 
   return (
     <>

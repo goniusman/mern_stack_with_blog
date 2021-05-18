@@ -18,6 +18,11 @@ const Sidebar = ({ categories, catLoad }) => {
           <h3 className="sidebar-title">Categories</h3>
           <div className="sidebar-item categories">
             <ul>
+              <li>
+                <Link to="/blog" onClick={() => catLoad("")}>
+                  All <span>()</span>
+                </Link>
+              </li>
               {categories.map((cat) => (
                 <li>
                   <Link to="/blog" onClick={() => catLoad(cat.category)}>
@@ -25,12 +30,6 @@ const Sidebar = ({ categories, catLoad }) => {
                   </Link>
                 </li>
               ))}
-
-              <li>
-                <Link to="/">
-                  test <span>(14)</span>
-                </Link>
-              </li>
             </ul>
           </div>
 
