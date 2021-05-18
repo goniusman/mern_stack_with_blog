@@ -12,7 +12,6 @@ import Author from "./author";
 import Comment from "./comment";
 
 const stylefornotfount = {
-  marginTop: "5rem",
   paddingTop: "2rem",
   paddingBottom: "2rem",
   textalign: "center",
@@ -25,7 +24,17 @@ class SingleBlog extends Component {
     email: this.props.user.email,
     website: "",
     comment: "",
+    error: {},
   };
+
+  static getDerivedStateFromProps(props, state) {
+    if (JSON.stringify(props.error) !== JSON.stringify(state.error)) {
+      return {
+        error: props.error,
+      };
+    }
+    return null;
+  }
 
   commentChangeHandler = (e) => {
     this.setState({
@@ -51,43 +60,47 @@ class SingleBlog extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, error } = this.props;
     return (
-      <>
-        {data._id ? (
-          <>
-            <Breadcrumbs title={data.title} />
-            <section id="blog" className="blog">
-              <div className="container" data-aos="fade-up">
-                <div className="row">
-                  <div className="col-lg-8 entries">
-                    <Article data={data} />
+      <section id="blog" className="blog">
+        <div className="container" data-aos="fade-up">
+          <Breadcrumbs title={data.title} />
+          <div className="row">
+            {error.message ? (
+              <h1 style={stylefornotfount}>{error.message}</h1>
+            ) : (
+              <>
+                {data._id ? (
+                  <>
+                    <div className="col-lg-8 entries">
+                      <Article data={data} />
 
-                    <Author data={data} />
+                      <Author data={data} />
 
-                    <Comment
-                      changeHander={this.commentChangeHandler}
-                      commentSubmit={this.commentSubmit}
-                      comments={this.props.comments}
-                      state={this.state}
-                    />
-                  </div>
-
-                  <Sidebar />
-                </div>
-              </div>
-            </section>
-          </>
-        ) : (
-          <h1 style={stylefornotfount}>No Products Found</h1>
-        )}
-      </>
+                      <Comment
+                        changeHander={this.commentChangeHandler}
+                        commentSubmit={this.commentSubmit}
+                        comments={this.props.comments}
+                        state={this.state}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <h1 style={stylefornotfount}>No Products Found</h1>
+                )}
+              </>
+            )}
+            {/* <Sidebar /> */}
+          </div>
+        </div>
+      </section>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
   data: state.blog.singleBlog,
+  error: state.blog.error,
   user: state.auth.user,
 });
 export default connect(mapStateToProps, {

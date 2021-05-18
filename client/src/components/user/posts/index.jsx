@@ -7,6 +7,7 @@ import {
   loadBlog,
   createPost,
   loadCategory,
+  deletePost,
 } from "../../../store/actions/blogAction";
 import Breadcrumbs from "../breadcrumbs";
 import PostForm from "./postForm";
@@ -52,6 +53,12 @@ class Blog extends React.Component {
 
     this.props.loadBlog();
     this.props.loadCategory();
+  }
+
+  componentDidUpdate() {
+    // console.log("com update call");
+    // this.props.loadBlog();
+    // this.props.loadCategory();
   }
 
   changeHandler = (e) => {
@@ -151,6 +158,10 @@ class Blog extends React.Component {
     });
   };
 
+  deletePost = (id) => {
+    this.props.deletePost(id);
+  };
+
   handlePost = () => {
     const { posts: allPosts } = this.props;
     const { currentPage, pageSize, cat } = this.state;
@@ -162,7 +173,9 @@ class Blog extends React.Component {
     let aposts = paginate(tagposts, currentPage, pageSize);
     let posts =
       aposts.length > 0 ? (
-        aposts.map((item) => <Articles key={item._id} item={item} />)
+        aposts.map((item) => (
+          <Articles key={item._id} item={item} deletePost={this.deletePost} />
+        ))
       ) : (
         <p>There are no posts</p>
       );
@@ -236,6 +249,9 @@ const mamStateToProps = (state) => ({
   posts: state.blog,
   auth: state.auth,
 });
-export default connect(mamStateToProps, { loadBlog, createPost, loadCategory })(
-  Blog
-);
+export default connect(mamStateToProps, {
+  loadBlog,
+  createPost,
+  loadCategory,
+  deletePost,
+})(Blog);

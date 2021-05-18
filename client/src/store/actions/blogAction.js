@@ -34,15 +34,25 @@ export const loadCategory = () => (dispatchs) => {
 export const SingleloadBlog = (id) => (dispatchs) => {
   Axios.get(`/api/post/${id}`)
     .then((res) => {
-      dispatchs({
-        type: types.LOAD_SINGLE_BLOG,
-        payload: {
-          singleBlog: res.data,
-        },
-      });
+      try {
+        dispatchs({
+          type: types.LOAD_SINGLE_BLOG,
+          payload: {
+            singleBlog: res.data,
+            error: {},
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     })
     .catch((err) => {
-      console.log(err);
+      dispatchs({
+        type: types._ERROR,
+        payload: {
+          error: err.response.data,
+        },
+      });
     });
 };
 
@@ -108,6 +118,22 @@ export const createComment = (posts) => (dispatch) => {
           error: err.response.data,
         },
       });
+      console.log(err);
+    });
+};
+
+export const deletePost = (id) => (dispatch) => {
+  Axios.delete(`/api/post/${id}`)
+    .then((res) => {
+      dispatch({
+        type: types.SUCCESS_MESSAGE,
+        payload: {
+          success: res.data,
+        },
+      });
+      console.log(res);
+    })
+    .catch((err) => {
       console.log(err);
     });
 };

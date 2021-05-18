@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Articles = ({ item }) => {
+const Articles = ({ item, deletePost }) => {
   return (
     <article className="entry" key={item._id}>
       <div className="entry-img">
@@ -59,6 +59,12 @@ const Articles = ({ item }) => {
             to={`/single-post/${item._id}`}
           >
             <span className="h4 pr-5">Read More</span>
+          </Link>
+          <Link
+            key={item._id}
+            onClick={() => deletePost(item._id)}
+          >
+            <span className="h4 pr-5">Delete</span>
           </Link>
         </div>
       </div>

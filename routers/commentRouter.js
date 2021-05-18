@@ -1,10 +1,11 @@
 const router = require("express").Router();
+const authenticate = require("../authenticate");
 const { create, getAll, remove } = require("../controllers/commentController");
 // const authenticate = require('../authenticket')
 
 router.post("/", create);
 
-router.get("/:id", getAll);
+router.get("/:id", authenticate, getAll);
 
 router.delete("/:id", remove);
 

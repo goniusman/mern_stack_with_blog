@@ -34,6 +34,14 @@ const blogReducer = (state = init, action) => {
         // error: {}
       };
     }
+    case types._ERROR: {
+      return {
+        ...state,
+        // blog: {},
+        error: action.payload.error,
+        // error: {}
+      };
+    }
     case types.LOAD_COMMENT: {
       return {
         ...state,

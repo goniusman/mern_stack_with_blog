@@ -116,6 +116,8 @@ module.exports = {
 
   remove(req, res) {
     let { id } = req.params;
+    console.log(id);
+
     Post.findOneAndDelete({ _id: id })
       .then((result) => {
         return res.status(204).json({

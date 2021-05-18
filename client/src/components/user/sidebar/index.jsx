@@ -23,13 +23,14 @@ const Sidebar = ({ categories, catLoad }) => {
                   All <span>()</span>
                 </Link>
               </li>
-              {categories.map((cat) => (
-                <li>
-                  <Link to="/blog" onClick={() => catLoad(cat.category)}>
-                    {cat.category} <span>(0)</span>
-                  </Link>
-                </li>
-              ))}
+              {categories.length > 0 &&
+                categories.map((cat) => (
+                  <li>
+                    <Link to="/blog" onClick={() => catLoad(cat.category)}>
+                      {cat.category} <span>(0)</span>
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </div>
 
