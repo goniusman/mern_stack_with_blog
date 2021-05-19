@@ -18,14 +18,12 @@ import Articles from "./article";
 
 class Blog extends React.Component {
   state = {
-    post: {
-      title: "",
-      description: "",
-      tag: "",
-      category: "genaral",
-      author: this.props.auth.user.name,
-      file: "",
-    },
+    title: "",
+    description: "",
+    tag: "",
+    category: "genaral",
+    author: this.props.auth.user.name,
+    file: "",
     pageSize: 2,
     currentPage: 1,
     error: {},
@@ -63,9 +61,7 @@ class Blog extends React.Component {
 
   changeHandler = (e) => {
     this.setState({
-      post: {
-        [e.target.name]: [e.target.value],
-      },
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -136,10 +132,9 @@ class Blog extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const {
-      post: { title, description, category, tag, author, file },
-    } = this.state;
-    console.log(title, description, category, tag);
+
+    const { title, description, category, tag, author, file } = this.state;
+
     let formdata = new FormData();
     formdata.append("file", file);
     formdata.append("title", title);
@@ -148,7 +143,10 @@ class Blog extends React.Component {
     formdata.append("tag", tag);
     formdata.append("category", category);
     this.props.createPost(formdata);
-    this.setState({ title: "", description: "", tag: "", file: "" });
+
+    if (Object.keys(this.props.posts.error).length == 0) {
+      this.setState({ title: "", description: "", tag: "", file: "" });
+    }
   };
 
   pageChangeEvent = (page) => {
@@ -218,7 +216,7 @@ class Blog extends React.Component {
           <div className="container" data-aos="fade-up">
             <div className="row">
               <div className="col-lg-8 entries">
-                <div class="form-group">
+                <div className="form-group">
                   <ToastContainer />
                 </div>
                 {auth.isAuthenticated && (

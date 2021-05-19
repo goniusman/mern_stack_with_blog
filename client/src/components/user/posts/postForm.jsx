@@ -23,9 +23,7 @@ function PostForm({
   //   getData();
   // }, []);
 
-  const {
-    post: { title, description, tag },
-  } = state;
+  const { title, description, tag } = state;
 
   return (
     <>
@@ -58,7 +56,9 @@ function PostForm({
                   <option value="">Select Type</option>
                   {categories.length > 0 &&
                     categories.map((cat) => (
-                      <option value={cat.category}>{cat.category}</option>
+                      <option key={cat._id} value={cat.category}>
+                        {cat.category}
+                      </option>
                     ))}
                 </Input>
               </FormGroup>

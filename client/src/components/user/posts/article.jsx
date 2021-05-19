@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Articles = ({ item, deletePost }) => {
   return (
-    <article className="entry" key={item._id}>
+    <article className="entry">
       <div className="entry-img">
         {item.image ? (
           <img src={item.image} alt={item.image} className="img-fluid" />
@@ -17,12 +17,7 @@ const Articles = ({ item, deletePost }) => {
       </div>
 
       <h2 className="entry-title">
-        <Link
-          target=""
-          item={item}
-          key={item._id}
-          to={`/single-post/${item._id}`}
-        >
+        <Link target="" item={item} to={`/single-post/${item._id}`}>
           {item.title}
         </Link>
       </h2>
@@ -52,18 +47,10 @@ const Articles = ({ item, deletePost }) => {
       <div className="entry-content">
         <p>{item.description}</p>
         <div className="read-more">
-          <Link
-            target=""
-            item={item}
-            key={item._id}
-            to={`/single-post/${item._id}`}
-          >
+          <Link target="" item={item} to={`/single-post/${item._id}`}>
             <span className="h4 pr-5">Read More</span>
           </Link>
-          <Link
-            key={item._id}
-            onClick={() => deletePost(item._id)}
-          >
+          <Link key={item._id} onClick={() => deletePost(item._id)}>
             <span className="h4 pr-5">Delete</span>
           </Link>
         </div>

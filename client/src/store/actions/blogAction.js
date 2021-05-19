@@ -127,9 +127,7 @@ export const deletePost = (id) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: types.SUCCESS_MESSAGE,
-        payload: {
-          success: res.data,
-        },
+        payload: { id: res.data._id },
       });
       console.log(res);
     })

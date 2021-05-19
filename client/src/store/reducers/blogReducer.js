@@ -78,7 +78,16 @@ const blogReducer = (state = init, action) => {
         error: action.payload.error,
       };
     }
-
+    case types.SUCCESS_MESSAGE: {
+      let allBlog = [...state.allBlog];
+      let t = allBlog.filter((blog) => {
+        return blog._id !== action.payload.id;
+      });
+      return {
+        ...state,
+        allBlog: t,
+      };
+    }
     default:
       return state;
   }

@@ -6,9 +6,6 @@ const postValidator = require("../validator/postValidator");
 
 module.exports = {
   create(req, res) {
-    if (req.files === null) {
-      return res.status(400).json({ msg: "No file uploaded" });
-    }
     let {
       title,
       description,
@@ -19,8 +16,7 @@ module.exports = {
       comments,
       isPublished,
     } = req.body;
-    let file = req.files.file;
-    console.log(file);
+
     let validate = postValidator({ title, description, category, tag, author });
 
     if (!validate.isValid) {
@@ -30,6 +26,11 @@ module.exports = {
       // if (!fs.existsSync(dir)) {
       //   fs.mkdirSync(dir);
       // }
+      if (req.files === null) {
+        return res.status(400).json({ msg: "No file uploaded" });
+      }
+      let file = req.files.file;
+
       let filePath = `/uploads/` + Date.now() + `-${file.name}`;
       file.mv(
         `${__dirname}/../client/public/uploads/` + Date.now() + `-${file.name}`,
@@ -116,12 +117,9 @@ module.exports = {
 
   remove(req, res) {
     let { id } = req.params;
-    console.log(id);
-
     Post.findOneAndDelete({ _id: id })
       .then((result) => {
-        return res.status(204).json({
-          message: "Deleted Successfully",
+        return res.status(200).json({
           ...result._doc,
         });
       })
