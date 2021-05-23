@@ -1,9 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams, useRouteMatch } from "react-router-dom";
 import { logout } from "../../../store/actions/authAction";
+import List from "./list";
 
 const Header = ({ auth, logout }) => {
+  const to = useRouteMatch();
+  console.log(to);
   return (
     <>
       <header
@@ -21,91 +24,16 @@ const Header = ({ auth, logout }) => {
 
           <nav id="navbar" className="navbar">
             <ul>
-              <li>
-                <Link to="/" className="nav-link scrollto ">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <a className="nav-link scrollto" href="#about">
-                  About
-                </a>
-              </li>
-              <li>
-                <a className="nav-link scrollto" href="#services">
-                  Services
-                </a>
-              </li>
-              <li>
-                <a className="nav-link scrollto " href="#portfolio">
-                  Portfolio
-                </a>
-              </li>
-              <li>
-                <a className="nav-link scrollto" href="#team">
-                  Team
-                </a>
-              </li>
-              <li>
-                <Link to="/blog" className="active">
-                  Blog
-                </Link>
-              </li>
-              <li className="dropdown">
-                <Link>
-                  <span>Drop Down</span> <i className="bi bi-chevron-down"></i>
-                </Link>
-                <ul>
-                  <li>
-                    <Link>Drop Down 1</Link>
-                  </li>
-                  <li className="dropdown">
-                    <Link>
-                      <span>Deep Drop Down</span>{" "}
-                      <i className="bi bi-chevron-right"></i>
-                    </Link>
-                    <ul>
-                      <li>
-                        <Link>Deep Drop Down 1</Link>
-                      </li>
-                      <li>
-                        <Link>Deep Drop Down 2</Link>
-                      </li>
-                      <li>
-                        <Link>Deep Drop Down 3</Link>
-                      </li>
-                      <li>
-                        <Link>Deep Drop Down 4</Link>
-                      </li>
-                      <li>
-                        <Link>Deep Drop Down 5</Link>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <Link>Drop Down 2</Link>
-                  </li>
-                  <li>
-                    <Link>Drop Down 3</Link>
-                  </li>
-                  <li>
-                    <Link>Drop Down 4</Link>
-                  </li>
-                </ul>
-              </li>
+              <List name="Home" link="/" />
+
+              <List name="Blog" link="/blog" />
 
               {auth.isAuthenticated ? (
                 <li>
-                  <Link className="nav-link scrollto" onClick={logout}>
-                    Logout
-                  </Link>
+                  <Link onClick={logout}>Logout</Link>
                 </li>
               ) : (
-                <li>
-                  <Link className="nav-link scrollto" to="/login">
-                    Login
-                  </Link>
-                </li>
+                <List name="Login" link="/login" />
               )}
             </ul>
             <i className="bi bi-list mobile-nav-toggle"></i>
