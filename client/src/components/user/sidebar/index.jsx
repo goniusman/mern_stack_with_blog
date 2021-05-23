@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const Sidebar = ({ categories, catLoad }) => {
+const Sidebar = ({ categories, catLoad, searchHandler, tags, tagLoad }) => {
   return (
     <>
       <div className="col-lg-4">
@@ -8,7 +8,10 @@ const Sidebar = ({ categories, catLoad }) => {
           <h3 className="sidebar-title">Search</h3>
           <div className="sidebar-item search-form">
             <form action="">
-              <input type="text" />
+              <input
+                type="search"
+                onChange={(e) => searchHandler(e.target.value)}
+              />
               <button type="submit">
                 <i className="bi bi-search"></i>
               </button>
@@ -25,9 +28,9 @@ const Sidebar = ({ categories, catLoad }) => {
               </li>
               {categories.length > 0 &&
                 categories.map((cat) => (
-                  <li key={cat._id}>
-                    <Link to="/blog" onClick={() => catLoad(cat.category)}>
-                      {cat.category} <span>(0)</span>
+                  <li key={cat[0]}>
+                    <Link to="/blog" onClick={() => catLoad(cat[0])}>
+                      {cat[0]} <span>({++cat[1].length})</span>
                     </Link>
                   </li>
                 ))}
@@ -88,39 +91,14 @@ const Sidebar = ({ categories, catLoad }) => {
           <h3 className="sidebar-title">Tags</h3>
           <div className="sidebar-item tags">
             <ul>
-              <li>
-                <Link to="/">App</Link>
-              </li>
-              <li>
-                <Link to="/">IT</Link>
-              </li>
-              <li>
-                <Link to="/">Business</Link>
-              </li>
-              <li>
-                <Link to="/">Mac</Link>
-              </li>
-              <li>
-                <Link to="/">Design</Link>
-              </li>
-              <li>
-                <Link to="/">Office</Link>
-              </li>
-              <li>
-                <Link to="/">Creative</Link>
-              </li>
-              <li>
-                <Link to="/">Studio</Link>
-              </li>
-              <li>
-                <Link to="/">Smart</Link>
-              </li>
-              <li>
-                <Link to="/">Tips</Link>
-              </li>
-              <li>
-                <Link to="/">Marketing</Link>
-              </li>
+              {tags.length &&
+                tags.map((tag) => (
+                  <li key={tag}>
+                    <Link to="/blog" onClick={() => tagLoad(tag[0])}>
+                      {tag[0]} ({++tag[1].length})
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </div>
         </div>

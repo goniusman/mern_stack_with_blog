@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
-const Articles = ({ item, deletePost }) => {
+const Articles = ({ item, deletePost, editPost }) => {
+  // useEffect(() => {
+  //   return () => {
+  //     alert("will unmount");
+  //   };
+  // }, []);
+
   return (
     <article className="entry">
       <div className="entry-img">
@@ -50,8 +57,11 @@ const Articles = ({ item, deletePost }) => {
           <Link target="" item={item} to={`/single-post/${item._id}`}>
             <span className="h4 pr-5">Read More</span>
           </Link>
-          <Link key={item._id} onClick={() => deletePost(item._id)}>
+          <Link onClick={() => deletePost(item._id)}>
             <span className="h4 pr-5">Delete</span>
+          </Link>
+          <Link onClick={() => editPost(item)}>
+            <span className="h4 pr-5">Edit</span>
           </Link>
         </div>
       </div>

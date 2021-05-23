@@ -13,6 +13,7 @@ const validate = (post) => {
   // if(!post.image){
   //     error.image = "Please Provide Your image"
   // }
+  
   if (!post.category) {
     error.category = "Please Provide Your category";
   }

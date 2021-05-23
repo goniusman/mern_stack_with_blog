@@ -8,6 +8,7 @@ import {
   createPost,
   loadCategory,
   deletePost,
+  editPost,
 } from "../../../store/actions/blogAction";
 import Breadcrumbs from "../breadcrumbs";
 import PostForm from "./postForm";
@@ -21,7 +22,7 @@ class Blog extends React.Component {
     title: "",
     description: "",
     tag: "",
-    category: "genaral",
+    category: "",
     author: this.props.auth.user.name,
     file: "",
     pageSize: 2,
@@ -29,6 +30,9 @@ class Blog extends React.Component {
     error: {},
     loaded: 0,
     cat: "",
+    postId: "",
+    searchTerm: "",
+    tag: "",
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -53,11 +57,18 @@ class Blog extends React.Component {
     this.props.loadCategory();
   }
 
-  componentDidUpdate() {
-    // console.log("com update call");
-    // this.props.loadBlog();
-    // this.props.loadCategory();
-  }
+  // shouldComponentUpdate() {
+  //   // console.log("com update call");
+  //   // this.props.loadBlog();
+  //   // this.props.loadCategory();
+  // }
+
+  // componentDidUpdate(prevProps) {
+  //   console.log(this.props.posts);
+  //   if (this.props.posts.length !== prevProps.posts.allBlog.length) {
+  //   this.props.loadBlog();
+  //   }
+  // }
 
   changeHandler = (e) => {
     this.setState({
@@ -133,19 +144,29 @@ class Blog extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    const { title, description, category, tag, author, file } = this.state;
-
+    const { title, description, category, tag, author, file, postId } =
+      this.state;
     let formdata = new FormData();
+    // formdata.append("id", postId);
     formdata.append("file", file);
     formdata.append("title", title);
     formdata.append("description", description);
     formdata.append("author", author);
     formdata.append("tag", tag);
     formdata.append("category", category);
+    if (postId != "") {
+      this.props.editPost(formdata, postId);
+    }
     this.props.createPost(formdata);
 
-    if (Object.keys(this.props.posts.error).length == 0) {
-      this.setState({ title: "", description: "", tag: "", file: "" });
+    if (Object.keys(this.props.posts.error).length === 0) {
+      this.setState({
+        title: "",
+        description: "",
+        category: "",
+        tag: "",
+        file: "",
+      });
     }
   };
 
@@ -160,19 +181,66 @@ class Blog extends React.Component {
     this.props.deletePost(id);
   };
 
+  editPost = (item) => {
+    console.log(item);
+    this.setState({
+      title: item.title,
+      description: item.description,
+      category: item.category,
+      tag: item.tag,
+      postId: item._id,
+    });
+  };
+
+  performSearch = () => {
+    let { allBlog } = this.props.posts;
+    if (allBlog.length > 0) {
+      return allBlog.filter((post) =>
+        post.title.toLowerCase().includes(this.state.searchTerm.toLowerCase())
+      );
+    }
+  };
+
+  searchHandler = (e) => {
+    this.setState({
+      searchTerm: e,
+      currentPage: 1,
+    });
+  };
+
+  groupArrayOfObjects = (list, key) => {
+    return list.reduce(function (rv, x) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, []);
+  };
+
   handlePost = () => {
     const { posts: allPosts } = this.props;
-    const { currentPage, pageSize, cat } = this.state;
+    const { currentPage, pageSize, cat, tag } = this.state;
 
-    let tagposts = cat
-      ? allPosts.allBlog.filter((p) => p.category === cat)
-      : allPosts.allBlog;
+    let tagposts;
+
+    if (cat) {
+      tagposts = allPosts.allBlog.filter((p) => p.category === cat);
+    } else if (tag) {
+      tagposts = allPosts.allBlog.filter((p) => p.tag === tag);
+    } else {
+      tagposts = allPosts.allBlog;
+    }
+
+    tagposts = this.performSearch();
 
     let aposts = paginate(tagposts, currentPage, pageSize);
     let posts =
       aposts.length > 0 ? (
         aposts.map((item) => (
-          <Articles key={item._id} item={item} deletePost={this.deletePost} />
+          <Articles
+            key={item._id}
+            item={item}
+            deletePost={this.deletePost}
+            editPost={this.editPost}
+          />
         ))
       ) : (
         <p>There are no posts</p>
@@ -184,6 +252,10 @@ class Blog extends React.Component {
     this.setState({ cat: catname, currentPage: 1 });
   };
 
+  tagLoad = (tagname) => {
+    this.setState({ tag: tagname, currentPage: 1 });
+  };
+
   performCat = (posts) => {
     const { cat } = this.state;
     return posts.filter((p) => p.category === cat);
@@ -192,13 +264,22 @@ class Blog extends React.Component {
   handlePagination = () => {
     let { posts: allPosts } = this.props;
     // allPosts = this.performCat(allPosts.allBlog);
-    const { currentPage, pageSize, cat } = this.state;
-    let tagposts = cat
-      ? allPosts.allBlog.filter((p) => p.category === cat)
-      : allPosts.allBlog;
+    const { currentPage, pageSize, cat, tag } = this.state;
+    let tagposts = cat;
+
+    if (cat) {
+      tagposts = allPosts.allBlog.filter((p) => p.category === cat);
+    } else if (tag) {
+      tagposts = allPosts.allBlog.filter((p) => p.tag === tag);
+    } else {
+      tagposts = allPosts.allBlog;
+    }
+
+    // tagposts = this.performSearch();
+
     return (
       <Pagination
-        items={allPosts && tagposts.length}
+        items={tagposts && tagposts.length}
         currentPage={currentPage}
         pageSize={pageSize}
         pageChange={this.pageChangeEvent}
@@ -206,8 +287,18 @@ class Blog extends React.Component {
     );
   };
 
+
+
   render() {
-    const { auth, posts } = this.props;
+    const { auth, posts, error } = this.props;
+
+    const categories = Object.entries(
+      this.groupArrayOfObjects(posts.allBlog, "category")
+    );
+
+    const tagposts = Object.entries(
+      this.groupArrayOfObjects(posts.allBlog, "tag")
+    );
 
     return (
       <>
@@ -227,6 +318,7 @@ class Blog extends React.Component {
                     imageHandler={this.imageHandler}
                     state={this.state}
                     categories={posts.categories}
+                    error={error}
                   />
                 )}
                 {/* {posts.allBlog && posts.allBlog.length} */}
@@ -234,7 +326,13 @@ class Blog extends React.Component {
                 {this.handlePagination()}
               </div>
 
-              <Sidebar categories={posts.categories} catLoad={this.catLoad} />
+              <Sidebar
+                searchHandler={this.searchHandler}
+                categories={categories}
+                catLoad={this.catLoad}
+                tags={tagposts}
+                tagLoad={this.tagLoad}
+              />
             </div>
           </div>
         </section>
@@ -247,9 +345,11 @@ const mamStateToProps = (state) => ({
   posts: state.blog,
   auth: state.auth,
 });
+
 export default connect(mamStateToProps, {
   loadBlog,
   createPost,
   loadCategory,
   deletePost,
+  editPost,
 })(Blog);

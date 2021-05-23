@@ -67,6 +67,7 @@ const blogReducer = (state = init, action) => {
       allBlog.push(action.payload.blog);
       return {
         ...state,
+        error:{},
         allBlog,
       };
     }

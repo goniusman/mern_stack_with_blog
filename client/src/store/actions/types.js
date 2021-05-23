@@ -4,6 +4,7 @@ export const LOAD_SINGLE_BLOG = "LOAD_SINGLE_BLOG";
 export const USERS_ERROR = "USERS_ERROR";
 export const SET_USER = "SET_USER";
 export const CREATE_POST = "CREATE_POST";
+export const EDIT_POST = "EDIT_POST";
 export const POST_ERROR = "POST_ERROR";
 export const LOAD_COMMENT = "LOAD_COMMENT";
 export const CREATE_COMMENT = "CREATE_COMMENT";

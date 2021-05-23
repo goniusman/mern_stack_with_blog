@@ -71,6 +71,32 @@ export const LoadComment = (id) => (dispatch) => {
     });
 };
 
+export const createComment = (posts) => (dispatch) => {
+  Axios.post("/api/post/single-post/", posts)
+    .then((res) => {
+      try {
+        dispatch({
+          type: types.CREATE_COMMENT,
+          payload: {
+            comment: res.data,
+            error: {},
+          },
+        });
+      } catch (error) {
+        console.log(res, error);
+      }
+    })
+    .catch((err) => {
+      dispatch({
+        type: types.COMMENT_ERROR,
+        payload: {
+          error: err.response.data,
+        },
+      });
+      console.log(err);
+    });
+};
+
 export const createPost = (posts) => (dispatch) => {
   Axios.post("/api/post/", posts)
     .then((res) => {
@@ -96,14 +122,14 @@ export const createPost = (posts) => (dispatch) => {
     });
 };
 
-export const createComment = (posts) => (dispatch) => {
-  Axios.post("/api/post/single-post/", posts)
+export const editPost = (posts, postId) => (dispatch) => {
+  Axios.put(`/api/post/${postId}`, posts)
     .then((res) => {
       try {
         dispatch({
-          type: types.CREATE_COMMENT,
+          type: types.EDIT_POST,
           payload: {
-            comment: res.data,
+            blog: res.data,
             error: {},
           },
         });
@@ -113,12 +139,11 @@ export const createComment = (posts) => (dispatch) => {
     })
     .catch((err) => {
       dispatch({
-        type: types.COMMENT_ERROR,
+        type: types.POST_ERROR,
         payload: {
           error: err.response.data,
         },
       });
-      console.log(err);
     });
 };
 

@@ -23,7 +23,7 @@ function PostForm({
   //   getData();
   // }, []);
 
-  const { title, description, tag } = state;
+  const { title, description, tag, category, postId, error } = state;
 
   return (
     <>
@@ -32,13 +32,20 @@ function PostForm({
           <Row>
             <Col>
               <FormGroup>
+                <Input type="hidden" id={postId} />
                 <Input
                   name="title"
                   type="text"
                   placeholder="Post Title*"
                   onChange={changeHandler}
                   value={title}
+                  className={
+                    error.title ? "form-control is-invalid" : "form-control"
+                  }
                 />
+                {error.title && (
+                  <div className="invalid-feedback">{error.title}</div>
+                )}
               </FormGroup>
               <Input
                 name="author"
@@ -51,7 +58,13 @@ function PostForm({
                   type="select"
                   name="category"
                   id="category"
+                  value={category}
                   onChange={changeHandler}
+                  className={
+                    error.description
+                      ? "form-control is-invalid"
+                      : "form-control"
+                  }
                 >
                   <option value="">Select Type</option>
                   {categories.length > 0 &&
@@ -61,6 +74,9 @@ function PostForm({
                       </option>
                     ))}
                 </Input>
+                {error.category && (
+                  <div className="invalid-feedback">{error.category}</div>
+                )}
               </FormGroup>
             </Col>
           </Row>
@@ -71,8 +87,15 @@ function PostForm({
                   name="file"
                   type="file"
                   onChange={imageHandler}
-                  multiple
+                  className={
+                    error.description
+                      ? "form-control is-invalid"
+                      : "form-control"
+                  }
                 />
+                {error.file && (
+                  <div className="invalid-feedback">{error.file}</div>
+                )}
               </FormGroup>
             </Col>
           </Row>
@@ -86,7 +109,15 @@ function PostForm({
                   placeholder="Description"
                   onChange={changeHandler}
                   value={description}
+                  className={
+                    error.description
+                      ? "form-control is-invalid"
+                      : "form-control"
+                  }
                 />
+                {error.title && (
+                  <div className="invalid-feedback">{error.title}</div>
+                )}
               </FormGroup>
             </Col>
           </Row>
@@ -99,7 +130,15 @@ function PostForm({
                   placeholder="all tags"
                   onChange={changeHandler}
                   value={tag}
+                  className={
+                    error.description
+                      ? "form-control is-invalid"
+                      : "form-control"
+                  }
                 />
+                {error.tag && (
+                  <div className="invalid-feedback">{error.tag}</div>
+                )}
               </FormGroup>
             </Col>
           </Row>

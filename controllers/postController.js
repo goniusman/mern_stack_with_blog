@@ -27,7 +27,7 @@ module.exports = {
       //   fs.mkdirSync(dir);
       // }
       if (req.files === null) {
-        return res.status(400).json({ msg: "No file uploaded" });
+        return res.status(400).json({ file: "No file uploaded" });
       }
       let file = req.files.file;
 
@@ -97,11 +97,13 @@ module.exports = {
 
   update(req, res) {
     let { id } = req.params;
-    let { title, description } = req.body;
+    let { title, description, category, tag } = req.body;
     Post.findById(id)
       .then((post) => {
         post.title = title;
         post.description = description;
+        post.category = category;
+        post.tag = tag;
         Post.findOneAndUpdate({ _id: id }, { $set: post }, { new: true })
           .then((result) => {
             return res.status(201).json({
@@ -126,24 +128,24 @@ module.exports = {
       .catch((error) => serverError(res, error));
   },
 
-  updateSolved(req, res) {
-    let { id } = req.params;
-    post
-      .findById(id)
-      .then((post) => {
-        post.isComplete = !post.isComplete;
-        post
-          .findOneAndUpdate({ _id: id }, { $set: post }, { new: true })
-          .then((result) => {
-            return res.status(200).json({
-              message: "Updated Successfully Solved",
-              ...result._doc,
-            });
-          })
-          .catch((error) => serverError(res, error));
-      })
-      .catch((error) => serverError(res, error));
-  },
+  // updateSolved(req, res) {
+  //   let { id } = req.params;
+  //   post
+  //     .findById(id)
+  //     .then((post) => {
+  //       post.isComplete = !post.isComplete;
+  //       post
+  //         .findOneAndUpdate({ _id: id }, { $set: post }, { new: true })
+  //         .then((result) => {
+  //           return res.status(200).json({
+  //             message: "Updated Successfully Solved",
+  //             ...result._doc,
+  //           });
+  //         })
+  //         .catch((error) => serverError(res, error));
+  //     })
+  //     .catch((error) => serverError(res, error));
+  // },
 
   imageUpload(req, res) {
     const { id } = req.params;

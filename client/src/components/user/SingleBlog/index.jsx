@@ -59,6 +59,10 @@ class SingleBlog extends Component {
     this.props.LoadComment(params);
   }
 
+  cookieTest = () => {
+    console.log("visited");
+  };
+
   render() {
     const { data, error } = this.props;
     return (
@@ -73,7 +77,7 @@ class SingleBlog extends Component {
                 {data._id ? (
                   <>
                     <div className="col-lg-8 entries">
-                      <Article data={data} />
+                      <Article data={data} cookieTest={this.cookieTest} />
 
                       <Author data={data} />
 
