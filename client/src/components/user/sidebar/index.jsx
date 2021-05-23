@@ -24,8 +24,8 @@ const Sidebar = ({ categories, catLoad }) => {
                 </Link>
               </li>
               {categories.length > 0 &&
-                categories.map((cat) => (
-                  <li key={cat._id}>
+                categories.map((cat, i) => (
+                  <li key={i}>
                     <Link to="/blog" onClick={() => catLoad(cat.category)}>
                       {cat.category} <span>(0)</span>
                     </Link>

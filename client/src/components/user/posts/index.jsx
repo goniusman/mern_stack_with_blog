@@ -15,6 +15,8 @@ import Sidebar from "../sidebar";
 import Pagination from "../../common/Pagination";
 import { paginate } from "../../../utils/paginate";
 import Articles from "./article";
+import Footer from "../footer";
+import Header from "../header";
 
 class Blog extends React.Component {
   state = {
@@ -211,6 +213,7 @@ class Blog extends React.Component {
 
     return (
       <>
+        <Header />
         <Breadcrumbs title="All Blog" />
         <section id="blog" className="blog">
           <div className="container" data-aos="fade-up">
@@ -238,6 +241,7 @@ class Blog extends React.Component {
             </div>
           </div>
         </section>
+        <Footer />
       </>
     );
   }

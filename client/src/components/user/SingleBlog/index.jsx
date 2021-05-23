@@ -5,6 +5,8 @@ import {
   createComment,
   LoadComment,
 } from "../../../store/actions/blogAction";
+import Header from "../header";
+import Footer from "../footer";
 import Breadcrumbs from "../breadcrumbs";
 import Sidebar from "../sidebar";
 import Article from "./article";
@@ -62,38 +64,42 @@ class SingleBlog extends Component {
   render() {
     const { data, error } = this.props;
     return (
-      <section id="blog" className="blog">
-        <div className="container" data-aos="fade-up">
-          <Breadcrumbs title={data.title} />
-          <div className="row">
-            {error.message ? (
-              <h1 style={stylefornotfount}>{error.message}</h1>
-            ) : (
-              <>
-                {data._id ? (
-                  <>
-                    <div className="col-lg-8 entries">
-                      <Article data={data} />
+      <>
+        <Header />
+        <section id="blog" className="blog">
+          <div className="container" data-aos="fade-up">
+            <Breadcrumbs title={data.title} />
+            <div className="row">
+              {error.message ? (
+                <h1 style={stylefornotfount}>{error.message}</h1>
+              ) : (
+                <>
+                  {data._id ? (
+                    <>
+                      <div className="col-lg-8 entries">
+                        <Article data={data} />
 
-                      <Author data={data} />
+                        <Author data={data} />
 
-                      <Comment
-                        changeHander={this.commentChangeHandler}
-                        commentSubmit={this.commentSubmit}
-                        comments={this.props.comments}
-                        state={this.state}
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <h1 style={stylefornotfount}>No Products Found</h1>
-                )}
-              </>
-            )}
-            {/* <Sidebar /> */}
+                        <Comment
+                          changeHander={this.commentChangeHandler}
+                          commentSubmit={this.commentSubmit}
+                          comments={this.props.comments}
+                          state={this.state}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <h1 style={stylefornotfount}>No Products Found</h1>
+                  )}
+                </>
+              )}
+              {/* <Sidebar /> */}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+        <Footer />
+      </>
     );
   }
 }
