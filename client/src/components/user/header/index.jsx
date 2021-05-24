@@ -5,8 +5,6 @@ import { logout } from "../../../store/actions/authAction";
 import List from "./list";
 
 const Header = ({ auth, logout }) => {
-  const to = useRouteMatch();
-  console.log(to);
   return (
     <>
       <header
@@ -29,9 +27,12 @@ const Header = ({ auth, logout }) => {
               <List name="Blog" link="/blog" />
 
               {auth.isAuthenticated ? (
-                <li>
-                  <Link onClick={logout}>Logout</Link>
-                </li>
+                <>
+                  <List name="Profile" link="/profile" />
+                  <li>
+                    <Link onClick={logout}>Logout</Link>
+                  </li>
+                </>
               ) : (
                 <List name="Login" link="/login" />
               )}

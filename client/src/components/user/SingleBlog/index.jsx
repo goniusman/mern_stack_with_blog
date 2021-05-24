@@ -27,6 +27,7 @@ class SingleBlog extends Component {
     website: "",
     comment: "",
     error: {},
+    data: this.props.data,
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -61,18 +62,73 @@ class SingleBlog extends Component {
     this.props.LoadComment(params);
   }
 
-  cookieTest = () => {
-    console.log("visited");
+  checkValue = (value, arr) => {
+    var status = false;
+
+    for (var i = 0; i < arr.length; i++) {
+      var name = arr[i];
+      if (name == value) {
+        status = true;
+        break;
+      }
+    }
+
+    return status;
   };
+
+  addRecentPost = (data) => {
+    let posts = this.getRecentPost();
+
+    // if (Object.keys(data).length > 0) {
+    //   if (posts.includes(data)) {
+    //     posts.push(data);
+    //     localStorage.setItem("rposts", JSON.stringify(posts));
+     
+    //   } else {
+    //     posts.push(data);
+    //     localStorage.setItem("rposts", JSON.stringify(posts));
+       
+    //   }
+    // }
+    // if (Object.keys(data).length > 0) {
+    //   if (posts.length > 0) {
+    //     posts.forEach(function (item) {
+    //       if (item._id !== data._id) {
+    //         posts.push(data);
+    //         localStorage.setItem("rposts", JSON.stringify(posts));
+    //       }
+    //     });
+    //   } else {
+    //     posts.push(data);
+    //     localStorage.setItem("rposts", JSON.stringify(posts));
+    //   }
+    // }
+  };
+
+  getRecentPost = () => {
+    let rposts;
+    if (localStorage.getItem("rposts") === null) {
+      rposts = [];
+    } else {
+      rposts = JSON.parse(localStorage.getItem("rposts"));
+    }
+    return rposts;
+  };
+
+  // cookieTest = (data) => {
+  //   this.addRecentPost(data);
+  // };
 
   render() {
     const { data, error } = this.props;
+
     return (
       <>
         <Header />
         <section id="blog" className="blog">
           <div className="container" data-aos="fade-up">
             <Breadcrumbs title={data.title} />
+            {this.addRecentPost(data)}
             <div className="row">
               {error.message ? (
                 <h1 style={stylefornotfount}>{error.message}</h1>

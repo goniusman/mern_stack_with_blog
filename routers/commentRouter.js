@@ -5,7 +5,7 @@ const { create, getAll, remove } = require("../controllers/commentController");
 
 router.post("/", create);
 
-router.get("/:id", authenticate, getAll);
+router.get("/:id", getAll);
 
 router.delete("/:id", remove);
 

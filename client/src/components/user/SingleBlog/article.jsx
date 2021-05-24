@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Article = ({ data, cookieTest }) => {
+const Article = ({ data }) => {
   return (
     <>
       <article className="entry entry-single">
         <div className="entry-img">
-          {cookieTest()}
+         
           {data.image ? (
             <img src={data.image} alt={data.image} className="img-fluid" />
           ) : (

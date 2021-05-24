@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Blog from "./user/posts";
 import Admin from "./admin";
+import Profile from "./user/profile";
 import Home from "./user/home";
 import SingleBlog from "./user/SingleBlog";
 import Footer from "./user/footer";
@@ -15,6 +16,7 @@ const routes = [
   { path: "/register", exact: true, component: Register },
   { path: "/single-post/:postId", exact: true, component: SingleBlog },
   { path: "/blog", exact: true, component: Blog },
+  { path: "/profile", exact: true, component: Profile },
   // { path: "/admin", exact: true, component: Admin },
   { path: "*", exact: true, component: NoMatch },
 ];

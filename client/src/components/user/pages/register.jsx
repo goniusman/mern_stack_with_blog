@@ -31,8 +31,6 @@ export class Register extends Component {
     });
   };
 
-
-  
   handleSubmit = (e) => {
     e.preventDefault();
     const { name, email, role, password, confirmPassword, error } = this.state;
@@ -54,7 +52,7 @@ export class Register extends Component {
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-md-6">
-                {auth.isAuthenticated && <Redirect to="/" />}
+                {auth.isAuthenticated && <Redirect to="/profile" />}
                 {
                   <div className="card mx-4">
                     <div className="card-body p-4">
