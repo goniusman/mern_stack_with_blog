@@ -10,6 +10,7 @@ import {
   deletePost,
   editPost,
 } from "../../../store/actions/blogAction";
+
 import Breadcrumbs from "../breadcrumbs";
 import PostForm from "./postForm";
 import Sidebar from "../sidebar";
@@ -58,19 +59,6 @@ class Blog extends React.Component {
     this.props.loadBlog();
     this.props.loadCategory();
   }
-
-  // shouldComponentUpdate() {
-  //   // console.log("com update call");
-  //   // this.props.loadBlog();
-  //   // this.props.loadCategory();
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   console.log(this.props.posts);
-  //   if (this.props.posts.length !== prevProps.posts.allBlog.length) {
-  //   this.props.loadBlog();
-  //   }
-  // }
 
   changeHandler = (e) => {
     this.setState({
@@ -210,13 +198,6 @@ class Blog extends React.Component {
     });
   };
 
-  groupArrayOfObjects = (list, key) => {
-    return list.reduce(function (rv, x) {
-      (rv[x[key]] = rv[x[key]] || []).push(x);
-      return rv;
-    }, []);
-  };
-
   handlePost = () => {
     const { posts: allPosts } = this.props;
     const { currentPage, pageSize, cat, tag } = this.state;
@@ -289,18 +270,8 @@ class Blog extends React.Component {
     );
   };
 
-
-
   render() {
     const { auth, posts, error } = this.props;
-
-    const categories = Object.entries(
-      this.groupArrayOfObjects(posts.allBlog, "category")
-    );
-
-    const tagposts = Object.entries(
-      this.groupArrayOfObjects(posts.allBlog, "tag")
-    );
 
     return (
       <>
@@ -313,6 +284,7 @@ class Blog extends React.Component {
                 <div className="form-group">
                   <ToastContainer />
                 </div>
+
                 {auth.isAuthenticated && (
                   <PostForm
                     name={this.props.auth.user.name}
@@ -331,9 +303,9 @@ class Blog extends React.Component {
 
               <Sidebar
                 searchHandler={this.searchHandler}
-                categories={categories}
+                // categories={categories}
                 catLoad={this.catLoad}
-                tags={tagposts}
+                // tags={tagposts}
                 tagLoad={this.tagLoad}
               />
             </div>
