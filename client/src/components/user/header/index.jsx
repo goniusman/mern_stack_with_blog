@@ -28,7 +28,7 @@ const Header = ({ auth, logout }) => {
 
               {auth.isAuthenticated ? (
                 <>
-                  <List name="Profile" link="/profile" />
+                  {/* <List name="Profile" link="/profile" /> */}
                   <li>
                     <Link onClick={logout}>Logout</Link>
                   </li>

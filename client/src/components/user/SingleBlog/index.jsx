@@ -83,11 +83,11 @@ class SingleBlog extends Component {
     //   if (posts.includes(data)) {
     //     posts.push(data);
     //     localStorage.setItem("rposts", JSON.stringify(posts));
-     
+
     //   } else {
     //     posts.push(data);
     //     localStorage.setItem("rposts", JSON.stringify(posts));
-       
+
     //   }
     // }
     // if (Object.keys(data).length > 0) {
@@ -129,6 +129,7 @@ class SingleBlog extends Component {
           <div className="container" data-aos="fade-up">
             <Breadcrumbs title={data.title} />
             {this.addRecentPost(data)}
+
             <div className="row">
               {error.message ? (
                 <h1 style={stylefornotfount}>{error.message}</h1>
