@@ -112,6 +112,7 @@ module.exports = {
 
   imageUpload(req, res) {
     const { userId } = req.params;
+
     if (req.files === null) {
       return res.status(400).json({ msg: "No file uploaded" });
     }
@@ -119,7 +120,7 @@ module.exports = {
     const file = req.files.file;
 
     file.mv(
-      `${__dirname}/../client/public/user/uploads/${file.name}`,
+      `${__dirname}/../client/public/uploads/` + userId + `-${file.name}`,
       (err) => {
         if (err) {
           console.error(err);
@@ -128,13 +129,13 @@ module.exports = {
 
         User.findById(userId)
           .then((user) => {
-            user.image = `/user/uploads/${file.name}`;
+            user.image = "/uploads/" + userId + `-${file.name}`;
             User.findOneAndUpdate(
               { _id: userId },
               { $set: user },
               { new: true }
             )
-              .then((result) => {
+              .then((user) => {
                 let token = jwt.sign(
                   {
                     _id: user._id,

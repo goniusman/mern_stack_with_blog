@@ -6,6 +6,7 @@ const {
   getSinglePost,
   update,
   remove,
+  toogleUpdate,
 } = require("../controllers/postController");
 
 // for authenticate user
@@ -20,6 +21,7 @@ router.post("/", create);
 // router.post('/upload/:id', imageUpload)
 
 router.put("/:id", update);
+router.put("/toggle/:id", toogleUpdate);
 
 // router.put('/issuetoggle/:id', updateSolved)
 router.delete("/:id", remove);

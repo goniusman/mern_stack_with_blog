@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 
-const Articles = ({ item, deletePost, editPost }) => {
+const Articles = ({ item, deletePost, editPost, toggleLikeUnlike }) => {
   // useEffect(() => {
   //   return () => {
   //     alert("will unmount");
@@ -47,6 +47,14 @@ const Articles = ({ item, deletePost, editPost }) => {
           <li className="d-flex align-items-center">
             <i className="bi bi-chat-dots"></i>{" "}
             <a href="blog-single.html">{item.comments.length} Comments</a>
+          </li>
+          <li>
+            <i className=""></i>
+            <a onClick={() => toggleLikeUnlike(item._id)}>Like</a>
+          </li>
+          <li>
+            <i className=""></i>
+            <a onClick={() => toggleLikeUnlike(item._id)}>DisLike</a>
           </li>
         </ul>
       </div>

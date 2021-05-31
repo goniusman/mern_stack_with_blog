@@ -9,6 +9,7 @@ import {
   loadCategory,
   deletePost,
   editPost,
+  toggleLike,
 } from "../../../store/actions/blogAction";
 import Breadcrumbs from "../breadcrumbs";
 import PostForm from "./postForm";
@@ -217,6 +218,10 @@ class Blog extends React.Component {
     }, []);
   };
 
+  toggleLikeUnlike = (postId) => {
+    this.props.toggleLike(postId);
+  };
+
   handlePost = () => {
     const { posts: allPosts } = this.props;
     const { currentPage, pageSize, cat, tag } = this.state;
@@ -242,6 +247,7 @@ class Blog extends React.Component {
             item={item}
             deletePost={this.deletePost}
             editPost={this.editPost}
+            toggleLikeUnlike={this.toggleLikeUnlike}
           />
         ))
       ) : (
@@ -288,8 +294,6 @@ class Blog extends React.Component {
       />
     );
   };
-
-
 
   render() {
     const { auth, posts, error } = this.props;
@@ -356,4 +360,5 @@ export default connect(mamStateToProps, {
   loadCategory,
   deletePost,
   editPost,
+  toggleLike,
 })(Blog);

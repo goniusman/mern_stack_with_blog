@@ -147,6 +147,56 @@ export const editPost = (posts, postId) => (dispatch) => {
     });
 };
 
+export const toggleLike = (postId) => (dispatch) => {
+  Axios.put(`/api/post/toggle/${postId}`)
+    .then((res) => {
+      try {
+        dispatch({
+          type: types.EDIT_POST,
+          payload: {
+            blog: res.data,
+            error: {},
+          },
+        });
+      } catch (error) {
+        console.log(res, error);
+      }
+    })
+    .catch((err) => {
+      dispatch({
+        type: types.POST_ERROR,
+        payload: {
+          error: err.response.data,
+        },
+      });
+    });
+};
+
+export const toggleDislike = (postId) => (dispatch) => {
+  Axios.put(`/api/post/toggle/${postId}`)
+    .then((res) => {
+      try {
+        dispatch({
+          type: types.EDIT_POST,
+          payload: {
+            blog: res.data,
+            error: {},
+          },
+        });
+      } catch (error) {
+        console.log(res, error);
+      }
+    })
+    .catch((err) => {
+      dispatch({
+        type: types.POST_ERROR,
+        payload: {
+          error: err.response.data,
+        },
+      });
+    });
+};
+
 export const deletePost = (id) => (dispatch) => {
   Axios.delete(`/api/post/${id}`)
     .then((res) => {

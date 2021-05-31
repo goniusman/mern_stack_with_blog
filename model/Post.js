@@ -23,7 +23,17 @@ const postSchema = new Schema(
     tag: {
       type: String,
     },
-
+    like: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
+    },
+    dislike: {
+      type: Number,
+    },
     author: {
       type: String,
     },

@@ -128,24 +128,23 @@ module.exports = {
       .catch((error) => serverError(res, error));
   },
 
-  // updateSolved(req, res) {
-  //   let { id } = req.params;
-  //   post
-  //     .findById(id)
-  //     .then((post) => {
-  //       post.isComplete = !post.isComplete;
-  //       post
-  //         .findOneAndUpdate({ _id: id }, { $set: post }, { new: true })
-  //         .then((result) => {
-  //           return res.status(200).json({
-  //             message: "Updated Successfully Solved",
-  //             ...result._doc,
-  //           });
-  //         })
-  //         .catch((error) => serverError(res, error));
-  //     })
-  //     .catch((error) => serverError(res, error));
-  // },
+  toogleUpdate(req, res) {
+    let { id } = req.params;
+    Post.findById(id)
+      .then((post) => {
+        post.like = post.like + 1;
+        Post.findOneAndUpdate({ _id: id }, { $set: post }, { new: true })
+          .then((result) => {
+            console.log(result);
+            return res.status(200).json({
+              message: "Updated Successfully Solved",
+              ...result._doc,
+            });
+          })
+          .catch((error) => serverError(res, error));
+      })
+      .catch((error) => serverError(res, error));
+  },
 
   imageUpload(req, res) {
     const { id } = req.params;

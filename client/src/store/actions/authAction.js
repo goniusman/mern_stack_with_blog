@@ -40,12 +40,27 @@ export const login = (user) => (dispatch) => {
       });
     })
     .catch((error) => {
-        dispatch({
-            type: Types.USERS_ERROR,
-            payload: {
-              error: error.response.data,
-            },
-          });
+      dispatch({
+        type: Types.USERS_ERROR,
+        payload: {
+          error: error.response.data,
+        },
+      });
+    });
+};
+
+export const imageUpload = (id, formData) => (dispatch) => {
+  Axios.put(`/api/users/upload/${id}`, formData)
+    .then((res) => {
+      dispatch({
+        type: Types.UPLOAD_PROFILE_PIC,
+        payload: {
+          image: res.data,
+        },
+      });
+    })
+    .catch((error) => {
+      console.log(error);
     });
 };
 
