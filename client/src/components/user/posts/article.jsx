@@ -60,7 +60,7 @@ const Articles = ({ item, deletePost, editPost, toggleLikeUnlike }) => {
       </div>
 
       <div className="entry-content">
-        <p>{item.description}</p>
+        <p>{item.description.slice(0, 390)}</p>
         <div className="read-more">
           <Link target="" item={item} to={`/single-post/${item._id}`}>
             <span className="h4 pr-5">Read More</span>

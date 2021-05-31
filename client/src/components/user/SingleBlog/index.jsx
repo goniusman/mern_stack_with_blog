@@ -130,7 +130,7 @@ class SingleBlog extends Component {
             <Breadcrumbs title={data.title} />
             {this.addRecentPost(data)}
 
-            <div className="row">
+            <div className="row" style={{ marginTop: "2rem" }}>
               {error.message ? (
                 <h1 style={stylefornotfount}>{error.message}</h1>
               ) : (
